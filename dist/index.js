@@ -1,0 +1,2 @@
+var e=require("react");module.exports=function(){var t=e.useRef(null),r=e.useState({fontSize:100,fontSizePrev:20}),n=r[0],f=r[1],o=n.fontSize,i=n.fontSizePrev;return e.useEffect(function(){var e=Math.abs(o-i)<=5,r=!!t.current&&t.current.scrollHeight>t.current.offsetHeight,n=o>i;e?r&&f({fontSize:i<o?i:o-(i-o),fontSizePrev:i}):f({fontSize:o+(r?n?i-o:20-o:n?100-o:i-o)/2,fontSizePrev:o})},[o,i,t]),{fontSize:o+"%",ref:t}};
+//# sourceMappingURL=index.js.map

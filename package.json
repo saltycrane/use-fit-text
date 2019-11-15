@@ -1,0 +1,19 @@
+{
+  "name": "use-fit-text",
+  "version": "1.0.0",
+  "description": "React hook used to fit text in a div",
+  "source": "index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "microbundle"
+  },
+  "author": "saltycrane",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.11",
+    "microbundle": "^0.11.0"
+  }
+}

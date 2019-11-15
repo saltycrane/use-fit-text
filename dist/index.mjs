@@ -1,0 +1,2 @@
+import{useEffect as e,useRef as t,useState as r}from"react";export default function(){var n=t(null),f=r({fontSize:100,fontSizePrev:20}),o=f[0],i=f[1],z=o.fontSize,S=o.fontSizePrev;return e(function(){var e=Math.abs(z-S)<=5,t=!!n.current&&n.current.scrollHeight>n.current.offsetHeight,r=z>S;e?t&&i({fontSize:S<z?S:z-(S-z),fontSizePrev:S}):i({fontSize:z+(t?r?S-z:20-z:r?100-z:S-z)/2,fontSizePrev:z})},[z,S,n]),{fontSize:z+"%",ref:n}}
+//# sourceMappingURL=index.mjs.map
