@@ -19,13 +19,17 @@ const useFitText = () => {
   const [state, setState] = useState({
     fontSize: MAX_FONT_SIZE,
     fontSizePrev: MIN_FONT_SIZE,
+    fontSizeMax: MAX_FONT_SIZE,
+    fontSizeMin: MIN_FONT_SIZE,
   });
-  const { fontSize, fontSizePrev } = state;
+  const { fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
 
   useEffect(() => {
     const isDone = Math.abs(fontSize - fontSizePrev) <= RESOLUTION;
     const isOverflow =
-      !!ref.current && ref.current.scrollHeight > ref.current.offsetHeight;
+      !!ref.current &&
+      (ref.current.scrollHeight > ref.current.offsetHeight ||
+        ref.current.scrollWidth > ref.current.offsetWidth);
     const isAsc = fontSize > fontSizePrev;
 
     // return if the font size has been adjusted "enough" (change within RESOLUTION)
@@ -36,23 +40,34 @@ const useFitText = () => {
           fontSizePrev < fontSize
             ? fontSizePrev
             : fontSize - (fontSizePrev - fontSize);
-        setState({ fontSize: fontSizeNew, fontSizePrev });
+        setState({
+          fontSize: fontSizeNew,
+          fontSizeMax,
+          fontSizeMin,
+          fontSizePrev,
+        });
       }
       return;
     }
 
     // binary search to adjust font size
     let delta: number;
+    let newMax = fontSizeMax;
+    let newMin = fontSizeMin;
     if (isOverflow) {
-      delta = isAsc ? fontSizePrev - fontSize : MIN_FONT_SIZE - fontSize;
+      delta = isAsc ? fontSizePrev - fontSize : fontSizeMin - fontSize;
+      newMax = Math.min(fontSizeMax, fontSize);
     } else {
-      delta = isAsc ? MAX_FONT_SIZE - fontSize : fontSizePrev - fontSize;
+      delta = isAsc ? fontSizeMax - fontSize : fontSizePrev - fontSize;
+      newMin = Math.max(fontSizeMin, fontSize);
     }
     setState({
       fontSize: fontSize + delta / 2,
+      fontSizeMax: newMax,
+      fontSizeMin: newMin,
       fontSizePrev: fontSize,
     });
-  }, [fontSize, fontSizePrev, ref]);
+  }, [fontSize, fontSizeMax, fontSizeMin, fontSizePrev, ref]);
 
   return { fontSize: `${fontSize}%`, ref };
 };

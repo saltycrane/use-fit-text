@@ -1,17 +1,40 @@
 import React from "react";
 import useFitText from "use-fit-text";
 
-function Example() {
+function Example1() {
   const { fontSize, ref } = useFitText();
-
   return (
     <div
       ref={ref}
-      style={{ fontSize, height: 40, width: 100, border: "1px solid #ccc" }}
+      style={{ fontSize, height: 40, width: 120, border: "1px solid #ccc" }}
     >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet,
+      consectetur
     </div>
   );
 }
 
-export default Example;
+function Example2() {
+  const { fontSize, ref } = useFitText();
+  return (
+    <div
+      ref={ref}
+      style={{ fontSize, height: 40, width: 120, border: "1px solid #ccc" }}
+    >
+      <div style={{ whiteSpace: "nowrap" }}>
+        Lorem ipsum dolor sit amet, consectetur
+      </div>
+    </div>
+  );
+}
+
+function Page() {
+  return (
+    <div style={{ fontSize: 16 }}>
+      <Example1 />
+      <Example2 />
+    </div>
+  );
+}
+
+export default Page;
