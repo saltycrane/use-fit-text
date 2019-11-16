@@ -42,7 +42,7 @@ const useFitText = () => {
     }
 
     // binary search to adjust font size
-    let delta;
+    let delta: number;
     if (isOverflow) {
       delta = isAsc ? fontSizePrev - fontSize : MIN_FONT_SIZE - fontSize;
     } else {

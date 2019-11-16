@@ -1,0 +1,15 @@
+{
+  "name": "use-fit-text-example",
+  "scripts": {
+    "dev": "next"
+  },
+  "prettier": {
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "next": "^9.1.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "use-fit-text": "^1.0.2"
+  }
+}
