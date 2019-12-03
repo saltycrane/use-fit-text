@@ -6,7 +6,7 @@ React hook that iteratively adjusts the font size so that text will fit in a div
     https://stackoverflow.com/a/10017343/101911
   - uses binary search; makes a maximum of 5 adjustments with a resolution
     of 5% font size from 20-100%
-  - [< 400 bytes](https://bundlephobia.com/result?p=use-fit-text@1.0.2) minified + gzipped; no dependencies
+  - [< 1 kB](https://bundlephobia.com/result?p=use-fit-text@1.2.0) minified + gzipped; no dependencies
 
 ## Installation
 
@@ -30,3 +30,17 @@ function Example() {
   );
 }
 ```
+
+## Options
+
+- `maxFontSize` (default: `100`) - maximum font size in percent
+- `minFontSize` (default: `20`) - minimum font size in percent
+- `recalcOnResize` (default: `false`) - set to `true` to recalculate text size on window resize
+- `resolution` (default: `5`) - font size resolution to adjust to in percent
+
+## Changelog
+
+- v1.2.0 - add options
+- v1.1.0 - fix binary search bug
+- v1.0.2 - add example
+- v1.0.0 - initial release

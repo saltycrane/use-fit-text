@@ -28,11 +28,31 @@ function Example2() {
   );
 }
 
+function Example3() {
+  const { fontSize, ref } = useFitText({
+    maxFontSize: 500,
+    recalcOnResize: true,
+  });
+  return (
+    <div
+      ref={ref}
+      style={{
+        fontSize,
+        height: 200,
+        width: "100vw",
+      }}
+    >
+      Lorem ipsum dolor sit amet, consectetur
+    </div>
+  );
+}
+
 function Page() {
   return (
     <div style={{ fontSize: 16 }}>
       <Example1 />
       <Example2 />
+      <Example3 />
     </div>
   );
 }
