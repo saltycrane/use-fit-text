@@ -1,6 +1,6 @@
 {
   "name": "use-fit-text",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "React hook used to fit text in a div",
   "author": "saltycrane",
   "license": "MIT",

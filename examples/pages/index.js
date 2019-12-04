@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React from "react";
 import useFitText from "use-fit-text";
 
@@ -49,11 +50,19 @@ function Example3() {
 
 function Page() {
   return (
-    <div style={{ fontSize: 16 }}>
-      <Example1 />
-      <Example2 />
-      <Example3 />
-    </div>
+    <>
+      <Head>
+        <link
+          href="https://unpkg.com/normalize.css@8.0.1/normalize.css"
+          rel="stylesheet"
+        />
+      </Head>
+      <div style={{ fontSize: 16 }}>
+        <Example1 />
+        <Example2 />
+        <Example3 />
+      </div>
+    </>
   );
 }
 
