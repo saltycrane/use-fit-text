@@ -1,4 +1,5 @@
 /// <reference types="react" />
+/// <reference types="next" />
 declare type TOptions = {
     maxFontSize?: number;
     minFontSize?: number;
@@ -15,7 +16,7 @@ declare type TOptions = {
  *   - with default parameters, makes a maximum of 5 adjustments with a
  *     resolution of 5% font size from 20-100%
  */
-declare const useFitText: ({ maxFontSize, minFontSize, recalcOnResize, resolution, }?: TOptions) => {
+declare const useFitText: ({ maxFontSize, minFontSize, resolution, }?: TOptions) => {
     fontSize: string;
     ref: import("react").MutableRefObject<HTMLDivElement>;
 };

@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import ResizeObserver from "resize-observer-polyfill";
 
 type TOptions = {
   maxFontSize?: number;
@@ -20,7 +27,6 @@ type TOptions = {
 const useFitText = ({
   maxFontSize = 100,
   minFontSize = 20,
-  recalcOnResize = false,
   resolution = 5,
 }: TOptions = {}) => {
   const initState = useCallback(
@@ -34,29 +40,37 @@ const useFitText = ({
   );
 
   const ref = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState(initState());
+  const isFirstObserve = useRef(true);
+  const [state, setState] = useState(initState);
   const { fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
 
-  // recalculate text size on window resize if `recalcOnResize` option is true
-  useEffect(() => {
-    if (!recalcOnResize) {
-      return;
-    }
-    let timeoutId: number;
-    const onResize = () => {
-      window.clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(() => {
-        setState(initState());
-      }, 100);
-    };
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.removeEventListener("resize", onResize);
-    };
-  }, [initState, recalcOnResize]);
+  // montior div size changes and recalculate on resize
+  let animationFrameId: number | null = null;
+  const [ro] = useState(
+    () =>
+      new ResizeObserver(() => {
+        animationFrameId = window.requestAnimationFrame(() => {
+          if (isFirstObserve.current) {
+            isFirstObserve.current = false;
+            return;
+          }
+          setState(initState());
+        });
+      }),
+  );
 
   useEffect(() => {
+    if (ref.current) {
+      ro.observe(ref.current);
+    }
+    return () => {
+      animationFrameId && window.cancelAnimationFrame(animationFrameId);
+      ro.disconnect();
+    };
+  }, [animationFrameId, ro]);
+
+  // check overflow and resize font
+  useLayoutEffect(() => {
     const isDone = Math.abs(fontSize - fontSizePrev) <= resolution;
     const isOverflow =
       !!ref.current &&

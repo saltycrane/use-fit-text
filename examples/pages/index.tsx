@@ -30,10 +30,7 @@ function Example2() {
 }
 
 function Example3() {
-  const { fontSize, ref } = useFitText({
-    maxFontSize: 500,
-    recalcOnResize: true,
-  });
+  const { fontSize, ref } = useFitText({ maxFontSize: 500 });
   return (
     <div
       ref={ref}
