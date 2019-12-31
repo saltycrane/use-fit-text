@@ -16,6 +16,6 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "typescript": "^3.7.4",
-    "use-fit-text": "^2.0.0"
+    "use-fit-text": "^2.1.0"
   }
 }

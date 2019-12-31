@@ -3,9 +3,10 @@
 React hook that iteratively adjusts the font size so that text will fit in a div.
  
   - checks if text is overflowing by [using `scrollHeight` and `offsetHeight`](https://stackoverflow.com/a/10017343/101911)
-  - recalculates upon container resize (using (polyfilled) `ResizeObserver`)
+  - recalculates upon container resize (using ([polyfilled](https://github.com/que-etc/resize-observer-polyfill)) [`ResizeObserver`](https://developers.google.com/web/updates/2016/10/resizeobserver))
   - uses binary search; with default options, makes a maximum of 5 adjustments with a resolution of 5% font size from 20-100%
-  - [< 4 kB](https://bundlephobia.com/result?p=use-fit-text@2.0.0) minified + gzipped
+  - [< 4 kB](https://bundlephobia.com/result?p=use-fit-text@2.1.0) minified + gzipped
+  - written in TypeScript
 
 ## Installation
 
@@ -38,6 +39,9 @@ function Example() {
 
 ## Changelog
 
+- v2.1.0
+  - fix SSR/prerender issue where text did not resize
+  - suppress `useLayoutEffect` warning for server render
 - v2.0.0
   - use `ResizeObserver` to always recalculate on container resize
   - remove `recalcOnResize` option

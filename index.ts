@@ -10,20 +10,18 @@ import ResizeObserver from "resize-observer-polyfill";
 type TOptions = {
   maxFontSize?: number;
   minFontSize?: number;
-  recalcOnResize?: boolean;
   resolution?: number;
 };
 
-/**
- * React hook that iteratively adjusts the font size so that text will fit in
- * a div.
- *
- *   - checks if text is overflowing by using `scrollHeight` and `offsetHeight`
- *     https://stackoverflow.com/a/10017343/101911
- *   - uses binary search
- *   - with default parameters, makes a maximum of 5 adjustments with a
- *     resolution of 5% font size from 20-100%
- */
+// suppress useLayoutEffect warning when rendering on the server
+// https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85
+const useIsoLayoutEffect =
+  typeof window !== "undefined" &&
+  window.document &&
+  window.document.createElement
+    ? useLayoutEffect
+    : useEffect;
+
 const useFitText = ({
   maxFontSize = 100,
   minFontSize = 20,
@@ -40,7 +38,6 @@ const useFitText = ({
   );
 
   const ref = useRef<HTMLDivElement>(null);
-  const isFirstObserve = useRef(true);
   const [state, setState] = useState(initState);
   const { fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
 
@@ -50,10 +47,6 @@ const useFitText = ({
     () =>
       new ResizeObserver(() => {
         animationFrameId = window.requestAnimationFrame(() => {
-          if (isFirstObserve.current) {
-            isFirstObserve.current = false;
-            return;
-          }
           setState(initState());
         });
       }),
@@ -70,7 +63,7 @@ const useFitText = ({
   }, [animationFrameId, ro]);
 
   // check overflow and resize font
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const isDone = Math.abs(fontSize - fontSizePrev) <= resolution;
     const isOverflow =
       !!ref.current &&
