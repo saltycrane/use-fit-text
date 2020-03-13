@@ -1,5 +1,4 @@
 /// <reference types="react" />
-/// <reference types="next" />
 declare type TOptions = {
     maxFontSize?: number;
     minFontSize?: number;
