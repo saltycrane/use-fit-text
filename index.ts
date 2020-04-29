@@ -7,7 +7,7 @@ import {
 } from "react";
 import ResizeObserver from "resize-observer-polyfill";
 
-type TOptions = {
+export type TOptions = {
   maxFontSize?: number;
   minFontSize?: number;
   resolution?: number;

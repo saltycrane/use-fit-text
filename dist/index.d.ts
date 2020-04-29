@@ -1,5 +1,5 @@
 /// <reference types="react" />
-declare type TOptions = {
+export declare type TOptions = {
     maxFontSize?: number;
     minFontSize?: number;
     resolution?: number;
