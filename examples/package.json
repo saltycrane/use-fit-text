@@ -9,13 +9,13 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@types/node": "^13.9.0",
-    "@types/react": "^16.9.23",
-    "@types/react-dom": "^16.9.5",
-    "next": "^9.3.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
+    "@types/node": "^13.13.4",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
+    "next": "^9.3.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "typescript": "^3.8.3",
-    "use-fit-text": "^2.1.2"
+    "use-fit-text": "^2.1.3"
   }
 }
