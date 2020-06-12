@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useCallback } from "react";
 import useFitText from "use-fit-text";
 
 function Example1() {
@@ -30,7 +30,14 @@ function Example2() {
 }
 
 function Example3() {
-  const { fontSize, ref } = useFitText({ maxFontSize: 500 });
+  const onStart = useCallback(() => {
+    console.log("Example 3 resizing started");
+  }, []);
+  const onFinish = useCallback((fontSize: number) => {
+    console.log("Example 3 resizing finished", fontSize);
+  }, []);
+  const { fontSize, ref } = useFitText({ maxFontSize: 500, onStart, onFinish });
+
   return (
     <div
       ref={ref}

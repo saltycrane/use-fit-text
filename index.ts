@@ -10,6 +10,8 @@ import ResizeObserver from "resize-observer-polyfill";
 export type TOptions = {
   maxFontSize?: number;
   minFontSize?: number;
+  onFinish?: (fontSize: number) => void;
+  onStart?: () => void;
   resolution?: number;
 };
 
@@ -25,19 +27,22 @@ const useIsoLayoutEffect =
 const useFitText = ({
   maxFontSize = 100,
   minFontSize = 20,
+  onFinish,
+  onStart,
   resolution = 5,
 }: TOptions = {}) => {
-  const initState = useCallback(
-    () => ({
+  const initState = useCallback(() => {
+    onStart && onStart();
+    return {
       fontSize: maxFontSize,
       fontSizePrev: minFontSize,
       fontSizeMax: maxFontSize,
       fontSizeMin: minFontSize,
-    }),
-    [maxFontSize, minFontSize],
-  );
+    };
+  }, [maxFontSize, minFontSize, onStart]);
 
   const ref = useRef<HTMLDivElement>(null);
+  const isFirstResizeRef = useRef(true);
   const [state, setState] = useState(initState);
   const { fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
 
@@ -47,7 +52,12 @@ const useFitText = ({
     () =>
       new ResizeObserver(() => {
         animationFrameId = window.requestAnimationFrame(() => {
-          setState(initState());
+          // don't reset the state the first time so it won't be reset
+          // twice consecutively on first load
+          if (!isFirstResizeRef.current) {
+            setState(initState());
+          }
+          isFirstResizeRef.current = false;
         });
       }),
   );
@@ -64,7 +74,7 @@ const useFitText = ({
 
   // check overflow and resize font
   useIsoLayoutEffect(() => {
-    const isDone = Math.abs(fontSize - fontSizePrev) <= resolution;
+    const isWithinResolution = Math.abs(fontSize - fontSizePrev) <= resolution;
     const isOverflow =
       !!ref.current &&
       (ref.current.scrollHeight > ref.current.offsetHeight ||
@@ -73,7 +83,7 @@ const useFitText = ({
 
     // return if the font size has been adjusted "enough" (change within `resolution`)
     // reduce font size by one increment if it's overflowing
-    if (isDone) {
+    if (isWithinResolution) {
       if (isOverflow) {
         const fontSizeNew =
           fontSizePrev < fontSize
@@ -85,6 +95,8 @@ const useFitText = ({
           fontSizeMin,
           fontSizePrev,
         });
+      } else {
+        onFinish && onFinish(fontSize);
       }
       return;
     }
@@ -106,7 +118,15 @@ const useFitText = ({
       fontSizeMin: newMin,
       fontSizePrev: fontSize,
     });
-  }, [fontSize, fontSizeMax, fontSizeMin, fontSizePrev, ref, resolution]);
+  }, [
+    fontSize,
+    fontSizeMax,
+    fontSizeMin,
+    fontSizePrev,
+    onFinish,
+    ref,
+    resolution,
+  ]);
 
   return { fontSize: `${fontSize}%`, ref };
 };
