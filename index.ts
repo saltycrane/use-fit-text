@@ -15,7 +15,7 @@ export type TOptions = {
   resolution?: number;
 };
 
-// suppress useLayoutEffect warning when rendering on the server
+// Suppress `useLayoutEffect` warning when rendering on the server
 // https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85
 const useIsoLayoutEffect =
   typeof window !== "undefined" &&
@@ -32,32 +32,40 @@ const useFitText = ({
   resolution = 5,
 }: TOptions = {}) => {
   const initState = useCallback(() => {
-    onStart && onStart();
     return {
+      calcKey: 0,
       fontSize: maxFontSize,
       fontSizePrev: minFontSize,
       fontSizeMax: maxFontSize,
       fontSizeMin: minFontSize,
     };
-  }, [maxFontSize, minFontSize, onStart]);
+  }, [maxFontSize, minFontSize]);
 
   const ref = useRef<HTMLDivElement>(null);
-  const isFirstResizeRef = useRef(true);
+  const innerHtmlPrevRef = useRef<string>();
+  const isCalculatingRef = useRef(false);
   const [state, setState] = useState(initState);
-  const { fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
+  const { calcKey, fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
 
-  // montior div size changes and recalculate on resize
+  // Montior div size changes and recalculate on resize
   let animationFrameId: number | null = null;
   const [ro] = useState(
     () =>
       new ResizeObserver(() => {
         animationFrameId = window.requestAnimationFrame(() => {
-          // don't reset the state the first time so it won't be reset
-          // twice consecutively on first load
-          if (!isFirstResizeRef.current) {
-            setState(initState());
+          if (isCalculatingRef.current) {
+            return;
           }
-          isFirstResizeRef.current = false;
+          onStart && onStart();
+          isCalculatingRef.current = true;
+          // `calcKey` is used in the dependencies array of
+          // `useIsoLayoutEffect` below. It is incremented so that the font size
+          // will be recalculated even if the previous state didn't change (e.g.
+          // when the text fit initially).
+          setState({
+            ...initState(),
+            calcKey: calcKey + 1,
+          });
         });
       }),
   );
@@ -72,8 +80,31 @@ const useFitText = ({
     };
   }, [animationFrameId, ro]);
 
-  // check overflow and resize font
+  // Recalculate when the div contents change
+  const innerHtml = ref.current && ref.current.innerHTML;
+  useEffect(() => {
+    if (calcKey === 0 || isCalculatingRef.current) {
+      return;
+    }
+    if (innerHtml !== innerHtmlPrevRef.current) {
+      onStart && onStart();
+      setState({
+        ...initState(),
+        calcKey: calcKey + 1,
+      });
+    }
+    innerHtmlPrevRef.current = innerHtml;
+  }, [calcKey, initState, innerHtml, onStart]);
+
+  // Check overflow and resize font
   useIsoLayoutEffect(() => {
+    // Don't start calculating font size until the `resizeKey` is incremented
+    // above in the `ResizeObserver` callback. This avoids an extra resize
+    // on initialization.
+    if (calcKey === 0) {
+      return;
+    }
+
     const isWithinResolution = Math.abs(fontSize - fontSizePrev) <= resolution;
     const isOverflow =
       !!ref.current &&
@@ -81,8 +112,8 @@ const useFitText = ({
         ref.current.scrollWidth > ref.current.offsetWidth);
     const isAsc = fontSize > fontSizePrev;
 
-    // return if the font size has been adjusted "enough" (change within `resolution`)
-    // reduce font size by one increment if it's overflowing
+    // Return if the font size has been adjusted "enough" (change within `resolution`)
+    // reduce font size by one increment if it's overflowing.
     if (isWithinResolution) {
       if (isOverflow) {
         const fontSizeNew =
@@ -94,14 +125,16 @@ const useFitText = ({
           fontSizeMax,
           fontSizeMin,
           fontSizePrev,
+          calcKey,
         });
       } else {
+        isCalculatingRef.current = false;
         onFinish && onFinish(fontSize);
       }
       return;
     }
 
-    // binary search to adjust font size
+    // Binary search to adjust font size
     let delta: number;
     let newMax = fontSizeMax;
     let newMin = fontSizeMin;
@@ -113,12 +146,14 @@ const useFitText = ({
       newMin = Math.max(fontSizeMin, fontSize);
     }
     setState({
+      calcKey,
       fontSize: fontSize + delta / 2,
       fontSizeMax: newMax,
       fontSizeMin: newMin,
       fontSizePrev: fontSize,
     });
   }, [
+    calcKey,
     fontSize,
     fontSizeMax,
     fontSizeMin,

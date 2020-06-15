@@ -1,6 +1,6 @@
 {
   "name": "use-fit-text",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "React hook used to fit text in a div",
   "author": "saltycrane",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
-    "@types/react": "^16.9.34",
+    "@types/react": "^16.9.36",
     "microbundle": "^0.12.0"
   }
 }
