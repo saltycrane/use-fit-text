@@ -1,4 +1,4 @@
-# use-fit-text
+# use-fit-text [![npm version](https://badge.fury.io/js/use-fit-text.svg)](https://badge.fury.io/js/use-fit-text)
 
 React hook that iteratively adjusts the font size so that text will fit in a div.
  
@@ -32,18 +32,25 @@ function Example() {
 }
 ```
 
-## Options
+## Demo / example code
 
-- `maxFontSize` (default: `100`) - maximum font size in percent
-- `minFontSize` (default: `20`) - minimum font size in percent
-- `onFinish` (default: `undefined`) - function that is called when resizing
-    finishes. The final fontSize is passed to the function as an argument.
-- `onStart` (default: `undefined`) - function that is called when resizing starts
-- `resolution` (default: `5`) - font size resolution to adjust to in percent
+- Demo site: https://saltycrane.github.io/use-fit-text/
+- [Example code](/examples/pages/index.tsx) is in the `/examples` folder
 
-## Examples
+## API
 
-See the example code in [`/examples`](/examples).
+### `useFitText(options)`
+- Returns an object with the following properties:
+  - `fontSize` (`string`) - the font size as a string (CSS percent) to be passed as the `fontSize` property of the `style` prop of the `div`
+  - `ref` (`React.MutableRefObject<HTMLDivElement>`) - the ref to be passed to the `ref` attribute of the `div`
+- `options` (optional) - an object with the following optional properties:
+
+  - `maxFontSize` (`number`, default: `100`) - maximum font size in percent
+  - `minFontSize` (`number`, default: `20`) - minimum font size in percent
+  - `onFinish` (`(fontSize: number) => void`, default: `undefined`) - function that is called when resizing
+      finishes. The final fontSize is passed to the function as an argument.
+  - `onStart` (`() => void`, default: `undefined`) - function that is called when resizing starts
+  - `resolution` (`number`, default: `5`) - font size resolution to adjust to in percent
 
 ## Questions
 
@@ -52,6 +59,7 @@ See the example code in [`/examples`](/examples).
 
 ## Changelog
 
+- v2.4.0-alpha - handle case where `minFontSize` is set larger than the `fontSize` value needed to fit the text in the div. Log an error to the console in this case.
 - v2.3.0
   - automatically recalculate font size when content changes
   - fix bug where a recalculation was not done on resize if the text initially fit in the div

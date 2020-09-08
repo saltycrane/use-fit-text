@@ -1,9 +1,11 @@
 {
   "name": "use-fit-text-example",
   "scripts": {
+    "build": "NODE_ENV=production rm -rf node_modules/.cache && rm -rf .next/ && rm -rf out/ && next build && next export && touch out/.nojekyll",
+    "deploy": "./bin/gh-pages",
     "dev": "next",
-    "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "tsc": "tsc --version && tsc"
   },
   "prettier": {
     "trailingComma": "all"

@@ -3,13 +3,13 @@ import React, { useCallback, useState } from "react";
 import useFitText from "use-fit-text";
 
 /**
- * Example1 - wrapping text
+ * Example1 - basic example
  */
 function Example1() {
   const { fontSize, ref } = useFitText();
   return (
     <>
-      <b>Example 1</b>
+      <b>Example 1 - basic example</b>
       <div
         ref={ref}
         style={{ fontSize, height: 40, width: 120, border: "1px solid #ccc" }}
@@ -29,7 +29,7 @@ function Example2() {
   const { fontSize, ref } = useFitText();
   return (
     <>
-      <b>Example 2</b>
+      <b>Example 2 - non-wrapping text</b>
       <div
         ref={ref}
         style={{ fontSize, height: 40, width: 120, border: "1px solid #ccc" }}
@@ -59,13 +59,22 @@ function Example3() {
 
   return (
     <>
-      <b>Example 3</b>
+      <b>Example 3 - recalculating on container change</b>
+      <p>Demonstrates:</p>
+      <ul>
+        <li>recalculating font size on window resize</li>
+        <li>
+          <code className="text-dark">onStart</code> and{" "}
+          <code className="text-dark">onFinish</code> callbacks (see log message
+          in the console)
+        </li>
+      </ul>
       <div
         ref={ref}
         style={{
           fontSize,
-          height: 200,
-          width: "100vw",
+          height: 100,
+          width: "100%",
         }}
       >
         Lorem ipsum dolor sit amet, consectetur
@@ -84,7 +93,7 @@ function Example4() {
 
   return (
     <>
-      <b>Example 4</b>
+      <b>Example 4 - recalculating on content change</b>
       <p>
         Change the input text and the font size will be updated to fit the text
         in the div
@@ -123,7 +132,7 @@ function Example5() {
     <>
       <b>
         Example 5 - fails to fit text because <code>fontSizeMin</code> is too
-        big. Show an error in the console.
+        big. Shows an error in the console.
       </b>
       <div
         ref={ref}
@@ -145,11 +154,29 @@ function Page() {
     <>
       <Head>
         <link
-          href="https://unpkg.com/normalize.css@8.0.1/normalize.css"
           rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossOrigin="anonymous"
         />
       </Head>
-      <div style={{ fontSize: 16 }}>
+      <nav className="navbar navbar-light bg-light">
+        <div className="container">
+          <span className="navbar-brand">use-fit-text</span>
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                href="https://github.com/saltycrane/use-fit-text"
+              >
+                Github
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div className="container" style={{ fontSize: 16 }}>
+        <h1 className="my-4">Examples</h1>
         <Example1 />
         <Example2 />
         <Example3 />
