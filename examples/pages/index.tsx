@@ -107,6 +107,37 @@ function Example4() {
 }
 
 /**
+ * Example5 - fails to fit text because `fontSizeMin` is too big
+ */
+function Example5() {
+  const { fontSize, ref } = useFitText({
+    maxFontSize: 150,
+    minFontSize: 90,
+    // Note: with `v2.3.0` and earlier, adding this non-referentially equal
+    // `onFinish` callback caused a "Maximum update depth exceeded" error.
+    // See https://github.com/saltycrane/use-fit-text/issues/9
+    onFinish: () => {},
+  });
+
+  return (
+    <>
+      <b>
+        Example 5 - fails to fit text because <code>fontSizeMin</code> is too
+        big. Show an error in the console.
+      </b>
+      <div
+        ref={ref}
+        style={{ fontSize, height: 40, width: 120, border: "1px solid red" }}
+      >
+        Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet,
+        consectetur
+      </div>
+      <hr />
+    </>
+  );
+}
+
+/**
  * Page
  */
 function Page() {
@@ -123,6 +154,7 @@ function Page() {
         <Example2 />
         <Example3 />
         <Example4 />
+        <Example5 />
       </div>
     </>
   );

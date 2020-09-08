@@ -110,12 +110,18 @@ const useFitText = ({
       !!ref.current &&
       (ref.current.scrollHeight > ref.current.offsetHeight ||
         ref.current.scrollWidth > ref.current.offsetWidth);
+    const isFailed = isOverflow && fontSize === fontSizePrev;
     const isAsc = fontSize > fontSizePrev;
 
     // Return if the font size has been adjusted "enough" (change within `resolution`)
     // reduce font size by one increment if it's overflowing.
     if (isWithinResolution) {
-      if (isOverflow) {
+      if (isFailed) {
+        isCalculatingRef.current = false;
+        console.error(
+          `Failed to fit text with \`minFontSize = ${minFontSize}\`. To fix, reduce \`minFontSize\`.`,
+        );
+      } else if (isOverflow) {
         const fontSizeNew =
           fontSizePrev < fontSize
             ? fontSizePrev
