@@ -122,12 +122,8 @@ const useFitText = ({
           `Failed to fit text with \`minFontSize = ${minFontSize}\`. To fix, reduce \`minFontSize\`.`,
         );
       } else if (isOverflow) {
-        const fontSizeNew =
-          fontSizePrev < fontSize
-            ? fontSizePrev
-            : fontSize - (fontSizePrev - fontSize);
         setState({
-          fontSize: fontSizeNew,
+          fontSize: isAsc ? fontSizePrev : fontSizeMin,
           fontSizeMax,
           fontSizeMin,
           fontSizePrev,

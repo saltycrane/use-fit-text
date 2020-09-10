@@ -59,7 +59,9 @@ function Example() {
 
 ## Changelog
 
-- v2.4.0-alpha - handle case where `minFontSize` is set larger than the `fontSize` value needed to fit the text in the div. Log an error to the console in this case.
+- v2.4.0-alpha.2
+  - handle case where `minFontSize` is set larger than the `fontSize` value needed to fit the text in the div. Log an error to the console in this case.
+  - fix final adjustment calcuation
 - v2.3.0
   - automatically recalculate font size when content changes
   - fix bug where a recalculation was not done on resize if the text initially fit in the div

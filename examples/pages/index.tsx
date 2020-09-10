@@ -120,8 +120,8 @@ function Example4() {
  */
 function Example5() {
   const { fontSize, ref } = useFitText({
-    maxFontSize: 150,
-    minFontSize: 90,
+    maxFontSize: 285.7142857142857,
+    minFontSize: 125.7142857142857,
     // Note: with `v2.3.0` and earlier, adding this non-referentially equal
     // `onFinish` callback caused a "Maximum update depth exceeded" error.
     // See https://github.com/saltycrane/use-fit-text/issues/9
