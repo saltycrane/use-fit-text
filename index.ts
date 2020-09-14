@@ -7,12 +7,23 @@ import {
 } from "react";
 import ResizeObserver from "resize-observer-polyfill";
 
+export type TLogLevel = "debug" | "info" | "warn" | "error" | "none";
+
 export type TOptions = {
+  logLevel?: TLogLevel;
   maxFontSize?: number;
   minFontSize?: number;
   onFinish?: (fontSize: number) => void;
   onStart?: () => void;
   resolution?: number;
+};
+
+const LOG_LEVEL: Record<TLogLevel, number> = {
+  debug: 10,
+  info: 20,
+  warn: 30,
+  error: 40,
+  none: 100,
 };
 
 // Suppress `useLayoutEffect` warning when rendering on the server
@@ -25,12 +36,15 @@ const useIsoLayoutEffect =
     : useEffect;
 
 const useFitText = ({
+  logLevel: logLevelOption = "info",
   maxFontSize = 100,
   minFontSize = 20,
   onFinish,
   onStart,
   resolution = 5,
 }: TOptions = {}) => {
+  const logLevel = LOG_LEVEL[logLevelOption];
+
   const initState = useCallback(() => {
     return {
       calcKey: 0,
@@ -118,9 +132,11 @@ const useFitText = ({
     if (isWithinResolution) {
       if (isFailed) {
         isCalculatingRef.current = false;
-        console.error(
-          `Failed to fit text with \`minFontSize = ${minFontSize}\`. To fix, reduce \`minFontSize\`.`,
-        );
+        if (logLevel <= LOG_LEVEL.info) {
+          console.info(
+            `[use-fit-text] reached \`minFontSize = ${minFontSize}\` without fitting text`,
+          );
+        }
       } else if (isOverflow) {
         setState({
           fontSize: isAsc ? fontSizePrev : fontSizeMin,

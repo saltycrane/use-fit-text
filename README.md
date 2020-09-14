@@ -6,7 +6,7 @@ React hook that iteratively adjusts the font size so that text will fit in a div
   - recalculates when container is resized (using ([polyfilled](https://github.com/que-etc/resize-observer-polyfill)) [`ResizeObserver`](https://developers.google.com/web/updates/2016/10/resizeobserver))
   - recalculates when content changes
   - uses binary search; with default options, makes a maximum of 5 adjustments with a resolution of 5% font size from 20-100%
-  - [< 4 kB](https://bundlephobia.com/result?p=use-fit-text@2.3.0) minified + gzipped
+  - [< 4 kB](https://bundlephobia.com/result?p=use-fit-text@2.4.0) minified + gzipped
   - written in TypeScript
 
 ## Installation
@@ -45,6 +45,7 @@ function Example() {
   - `ref` (`React.MutableRefObject<HTMLDivElement>`) - the ref to be passed to the `ref` attribute of the `div`
 - `options` (optional) - an object with the following optional properties:
 
+  - `logLevel` (`string`, default: `info`) - one of `debug`, `info`, `warn`, `error`, or `none`
   - `maxFontSize` (`number`, default: `100`) - maximum font size in percent
   - `minFontSize` (`number`, default: `20`) - minimum font size in percent
   - `onFinish` (`(fontSize: number) => void`, default: `undefined`) - function that is called when resizing
@@ -56,12 +57,15 @@ function Example() {
 
 - Why doesn't it work with Flexbox `justify-content: flex-end;`?
   This appears [to be](https://stackoverflow.com/questions/36130760/use-justify-content-flex-end-and-to-have-vertical-scrollbar) [a bug](https://github.com/philipwalton/flexbugs/issues/53) with Flexbox. Try using CSS Grid or `margin-top: auto;`
+- What does the "reached `minFontSize = 20` without fitting text" message in the console mean?
+  This means `use-fit-text` was not able to fit the text using the `minFontSize` setting of 20. To ensure the text fits, set `minFontSize` to a smaller value.
 
 ## Changelog
 
-- v2.4.0-alpha.2
-  - handle case where `minFontSize` is set larger than the `fontSize` value needed to fit the text in the div. Log an error to the console in this case.
+- v2.4.0
+  - handle case where `minFontSize` is set larger than the `fontSize` value needed to fit the text in the div. Log a message to the console in this case.
   - fix final adjustment calcuation
+  - add `logLevel` option to control what is logged to the console
 - v2.3.0
   - automatically recalculate font size when content changes
   - fix bug where a recalculation was not done on resize if the text initially fit in the div

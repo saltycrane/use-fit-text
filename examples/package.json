@@ -11,7 +11,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@types/node": "^14.6.4",
+    "@types/node": "^14.10.1",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "next": "^9.5.3",

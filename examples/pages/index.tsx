@@ -132,7 +132,7 @@ function Example5() {
     <>
       <b>
         Example 5 - fails to fit text because <code>fontSizeMin</code> is too
-        big. Shows an error in the console.
+        big. Shows a message in the console.
       </b>
       <div
         ref={ref}
