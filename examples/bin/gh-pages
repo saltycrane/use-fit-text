@@ -25,6 +25,11 @@ then
     git remote add --fetch origin "$remote"
 fi
 
+# delete gh-pages branch because got:
+# error: The following untracked working tree files would be overwritten by checkout:
+# git branch -D gh-pages
+git push origin --delete gh-pages
+
 if git rev-parse --verify origin/gh-pages > /dev/null 2>&1
 then
     git checkout gh-pages
