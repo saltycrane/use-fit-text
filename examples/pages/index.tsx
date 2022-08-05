@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import useFitText from "use-fit-text";
 
 /**
@@ -116,9 +116,53 @@ function Example4() {
 }
 
 /**
- * Example5 - fails to fit text because `fontSizeMin` is too big
+ * Example5 - avoid usage in conditional rendering
  */
 function Example5() {
+  const { fontSize, ref } = useFitText();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  return (
+    <>
+      <b>Example 5</b>
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <div style={{ width: 500, border: "1px solid grey" }}>
+          <div
+            ref={ref}
+            style={{ fontSize, whiteSpace: "nowrap", color: "red" }}
+          >
+            This text using "useFitText" does not get initially handled by the
+            script because of conditional rendering
+          </div>
+          <Example5DedicatedComp />
+        </div>
+      )}
+      <hr />
+    </>
+  );
+}
+
+function Example5DedicatedComp() {
+  const { fontSize, ref } = useFitText();
+
+  return (
+    <div ref={ref} style={{ fontSize, whiteSpace: "nowrap" }}>
+      Correct implementation: this text using "useFitText" gets handled
+      correctly because conditional rendering doesn't affect it.
+    </div>
+  );
+}
+
+/**
+ * Example6 - fails to fit text because `fontSizeMin` is too big
+ */
+function Example6() {
   const { fontSize, ref } = useFitText({
     maxFontSize: 285.7142857142857,
     minFontSize: 125.7142857142857,
@@ -131,7 +175,7 @@ function Example5() {
   return (
     <>
       <b>
-        Example 5 - fails to fit text because <code>fontSizeMin</code> is too
+        Example 6 - fails to fit text because <code>fontSizeMin</code> is too
         big. Shows a message in the console.
       </b>
       <div
@@ -182,6 +226,7 @@ function Page() {
         <Example3 />
         <Example4 />
         <Example5 />
+        <Example6 />
       </div>
     </>
   );
