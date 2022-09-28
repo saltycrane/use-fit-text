@@ -5,7 +5,6 @@ import {
   useRef,
   useState,
 } from "react";
-import ResizeObserver from "resize-observer-polyfill";
 
 export type TLogLevel = "debug" | "info" | "warn" | "error" | "none";
 
