@@ -1,5 +1,5 @@
 {
-  "name": "use-fit-text",
+  "name": "@hjgr/use-fit-text",
   "version": "2.4.0",
   "description": "React hook used to fit text in a div",
   "author": "saltycrane",
