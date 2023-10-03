@@ -43,6 +43,7 @@ function Example() {
 - Returns an object with the following properties:
   - `fontSize` (`string`) - the font size as a string (CSS percent) to be passed as the `fontSize` property of the `style` prop of the `div`
   - `ref` (`React.MutableRefObject<HTMLDivElement>`) - the ref to be passed to the `ref` attribute of the `div`
+  - `forceRefit` (`() => void`) - a function that can be called to force a recalculation of the font size
 - `options` (optional) - an object with the following optional properties:
 
   - `logLevel` (`string`, default: `info`) - one of `debug`, `info`, `warn`, `error`, or `none`

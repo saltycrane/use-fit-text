@@ -11,5 +11,6 @@ export declare type TOptions = {
 declare const useFitText: ({ logLevel: logLevelOption, maxFontSize, minFontSize, onFinish, onStart, resolution, }?: TOptions) => {
     fontSize: string;
     ref: import("react").MutableRefObject<HTMLDivElement>;
+    forceRefit: () => void;
 };
 export default useFitText;
