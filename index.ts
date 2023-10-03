@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState,} from "react";
 import ResizeObserver from "resize-observer-polyfill";
 
 export type TLogLevel = "debug" | "info" | "warn" | "error" | "none";
@@ -36,13 +30,13 @@ const useIsoLayoutEffect =
     : useEffect;
 
 const useFitText = ({
-  logLevel: logLevelOption = "info",
-  maxFontSize = 100,
-  minFontSize = 20,
-  onFinish,
-  onStart,
-  resolution = 5,
-}: TOptions = {}) => {
+                      logLevel: logLevelOption = "info",
+                      maxFontSize = 100,
+                      minFontSize = 20,
+                      onFinish,
+                      onStart,
+                      resolution = 5,
+                    }: TOptions = {}) => {
   const logLevel = LOG_LEVEL[logLevelOption];
 
   const initState = useCallback(() => {
@@ -59,7 +53,7 @@ const useFitText = ({
   const innerHtmlPrevRef = useRef<string>();
   const isCalculatingRef = useRef(false);
   const [state, setState] = useState(initState);
-  const { calcKey, fontSize, fontSizeMax, fontSizeMin, fontSizePrev } = state;
+  const {calcKey, fontSize, fontSizeMax, fontSizeMin, fontSizePrev} = state;
 
   // Montior div size changes and recalculate on resize
   let animationFrameId: number | null = null;
@@ -181,7 +175,14 @@ const useFitText = ({
     resolution,
   ]);
 
-  return { fontSize: `${fontSize}%`, ref };
+  const forceRefit = useCallback(() => {
+    setState({
+      ...initState(),
+      calcKey: calcKey + 1,
+    });
+  }, [calcKey, initState]);
+
+  return {fontSize: `${fontSize}%`, ref, forceRefit};
 };
 
 export default useFitText;
